@@ -20,7 +20,6 @@ class RequestOTP extends Component {
    async requestCode() {
       try {
          await axios.post(`${ROOT_URL}/requestOtp`, { phone: this.state.phone });
-         console.log('SEE ME?');
          this.props.navigation.navigate('verify', {});
       } catch (err) {
          alert(error);
