@@ -20,8 +20,8 @@ class RequestOTP extends Component {
    async requestCode() {
       try {
          await axios.post(`${ROOT_URL}/requestOtp`, { phone: this.state.phone });
-         this.props.navigation.navigate('verify', {});
-      } catch (err) {
+         this.props.navigation.navigate('verify');
+      } catch (error) {
          alert(error);
       }
    }
@@ -36,7 +36,7 @@ class RequestOTP extends Component {
                         placeholder= 'ENTER YOUR PHONE NUMBER'
                         value={this.state.phone}
                         keyboardType='numeric'
-                        onChangeText={phone => this.setState({ phone })}
+                        onChangeText={phone => this.setState({ phone: phone })}
                      />
                   </View>
                </CardSection>

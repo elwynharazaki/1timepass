@@ -14,7 +14,7 @@ module.exports = (req, res) => {
    const phone = String(req.body.phone)
                   .replace(/[^\d]/g,'');
 
-   admin.auth().getUser(phone)
+   admin.auth().getUser({ phone })
       .then((userRecord) => {
          const number = Math.random() * 8999 + 1000;
          const code = Math.floor(number);

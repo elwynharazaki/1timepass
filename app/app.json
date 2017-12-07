@@ -15,7 +15,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+		"bundleIdentifier": "id.harazaki.1tp",
+		"supportsTablet": true
+	},
+	"android": {
+      "package": "id.harazaki.1tp"
     }
   }
 }
