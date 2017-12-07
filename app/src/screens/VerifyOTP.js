@@ -11,7 +11,7 @@ const ROOT_URL = 'https://us-central1-timepass-ed7e0.cloudfunctions.net';
 class VerifyOTP extends Component {
    static navigationOptions = () => {
       return {
-         title: 'TODO LIST'
+         title: ''
       };
    }
 
