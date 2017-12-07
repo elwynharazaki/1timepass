@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, AsyncStorage } from 'react-native';
 import { Button, FormInput } from 'react-native-elements';
 import axios from 'axios';
+import firebase from 'firebase';
 
 import Card from './../components/Card';
 import CardSection from './../components/CardSection';
@@ -11,11 +12,16 @@ const ROOT_URL = 'https://us-central1-timepass-ed7e0.cloudfunctions.net';
 class VerifyOTP extends Component {
    static navigationOptions = () => {
       return {
-         title: ''
+         title: 'TODO LIST'
       };
    }
 
-   state = { phone: '', code: '' };
+   state = { code: '', token: '' };
+
+   async componentDidMount() {
+      const storeToken = await AsyncStorage.getItem('token');
+      this.setState({ token: storeToken });
+   }
 
    async verifyCode() {
       try {
@@ -23,6 +29,9 @@ class VerifyOTP extends Component {
             phone: this.state.phone,
             code: this.state.code
          });
+         AsyncStorage.setItem('token', response.data.token);
+         firebase.auth().signInWithCustomToken(response.data.token);
+         this.props.navigation.navigate('todo');
       } catch (err) {
          alert(error);
       }

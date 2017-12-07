@@ -14,20 +14,22 @@ module.exports = (req, res) => {
    const phone = String(req.body.phone)
                   .replace(/[^\d]/g,'');
 
-   admin.auth().getUser({ phone })
-      .then((userRecord) => {
+   admin.auth().createUser({ uid: phone })
+      .then((user) => {
          const number = Math.random() * 8999 + 1000;
          const code = Math.floor(number);
 
+         const body = {
+            "destination": phone,
+            "text": "Your code is: " + code,
+         }
+         
          axios({
             method: "POST",
             url: "https://mesabot.com/api/v2/send",
-            data: {
-               "destination": phone,
-               "text": "Your Code is: " + code,
-            },
+            data: body,
             headers: mesabot
-          })
+         })
          .then(() => {
             admin.database().ref('users/' + phone)
             .update({ code: code, valid: true })
@@ -38,17 +40,36 @@ module.exports = (req, res) => {
                   res.status(422).send(error);
                })
          })
-         .catch((error) => {
-            res.status(422).send(error);
-         })
       })
       .catch(() => {
-         admin.auth().createUser({ uid: phone })
-         .then((user) => {
-            return res.status(201).send(user);
-         })
-         .catch((error) => {
-            return res.status(422).send(error);
-         });
-      });
+         if (err) {
+            admin.auth().getUser( phone )
+            .then((userRecord) => {
+               const number = Math.random() * 8999 + 1000;
+               const code = Math.floor(number);
+
+               const body = {
+                  "destination": phone,
+                  "text": "Your code is: " + code,
+               }
+               
+               axios({
+                  method: "POST",
+                  url: "https://mesabot.com/api/v2/send",
+                  data: body,
+                  headers: mesabot
+               })
+               .then(() => {
+                  admin.database().ref('users/' + phone)
+                  .update({ code: code, valid: true })
+                     .then(() => {
+                        res.send({ message: 'Code has been sent'});
+                     })
+                     .catch((error) => {
+                           res.status(422).send(error);
+                     });
+               });
+            })
+         }
+      })
 }

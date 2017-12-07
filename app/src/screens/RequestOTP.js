@@ -34,7 +34,6 @@ class RequestOTP extends Component {
                   <View style={{ flex: 1 }}>
                      <FormInput
                         placeholder= 'ENTER YOUR PHONE NUMBER'
-                        value={this.state.phone}
                         keyboardType='numeric'
                         onChangeText={phone => this.setState({ phone: phone })}
                      />
